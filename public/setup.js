@@ -5,9 +5,8 @@
 var BACKEND_URL = 'http://localhost:3001/api/v1/';
 
 function getApplicationDetails(callback) {
-    var form = document.getElementById('form-generate');
-    var email = form.elements.namedItem('email').value;
-    var password = form.elements.namedItem('password').value;
+    var email = $('input[name=email]').val();
+    var password = $('input[name=password]').val();
 
     superagent.post(BACKEND_URL + 'apps/0/details').withCredentials().auth(email, password).end(function (error, result) {
         if (error || !result.ok) {
@@ -19,9 +18,8 @@ function getApplicationDetails(callback) {
 }
 
 function refreshApplicationDetails(callback) {
-    var form = document.getElementById('form-generate');
-    var email = form.elements.namedItem('email').value;
-    var password = form.elements.namedItem('password').value;
+    var email = $('input[name=email]').val();
+    var password = $('input[name=password]').val();
 
     superagent.post(BACKEND_URL + 'apps/0/generate').withCredentials().auth(email, password).end(function (error, result) {
         if (error || !result.ok) {
@@ -49,31 +47,39 @@ function signin(email, password) {
                 return;
             }
 
-            document.getElementById('application-key').innerHTML = result.appKey;
-            document.getElementById('application-secret').innerHTML = result.appSecret;
-            document.getElementById('box-signin').style.display = 'none';
-            document.getElementById('box-application').style.display = 'block';
+            $('#application-key').text(result.appKey);
+            $('#application-secret').text(result.appSecret);
+            $('#box-signin').hide();
+            $('#box-application').show();
         });
     });
 }
 
 function init() {
-    var form = document.getElementById('form-generate');
+    var form = $('#form-generate');
+    var confirmDialog = $('#modal-confirm');
 
-    form.addEventListener('submit', function (event) {
-        signin(form.elements.namedItem('email').value, form.elements.namedItem('password').value);
+    form.submit(function (event) {
+        signin($('input[name=email]').val(), $('input[name=password]').val());
         event.preventDefault();
     });
 
-    document.getElementById('app-refresh-button').addEventListener('click', function (event) {
-        refreshApplicationDetails(function (error, result) {
-            if (error) {
-                console.error('Failed to get details.', error);
-                return;
-            }
+    $('#app-refresh-button').click(function (event) {
+        confirmDialog.modal('show');
+        $('#modal-confirm-ok').click(function () {
+            confirmDialog.modal('hide');
+            refreshApplicationDetails(function (error, result) {
+                if (error) {
+                    console.error('Failed to get details.', error);
+                    return;
+                }
 
-            document.getElementById('application-key').innerHTML = result.appKey;
-            document.getElementById('application-secret').innerHTML = result.appSecret;
+                $('#application-key').text(result.appKey);
+                $('#application-secret').text(result.appSecret);
+            });
+        });
+        $('#modal-confirm-cancel').click(function (event) {
+            confirmDialog.modal('hide');
         });
     });
 }
