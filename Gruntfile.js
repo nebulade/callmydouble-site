@@ -9,18 +9,19 @@ module.exports = function(grunt) {
             options: {
                 banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
             },
-            build: {
-                src: 'src/*.js',
-                dest: 'build/<%= pkg.name %>.min.js'
+            minify: {
+                expand: true,
+                src: ['src/*.js'],
+                dest: 'dist/'
             }
         },
         assemble: {
             options: {
-                data: ['data/*.{json,yml}']
+                data: ['data/*.json'],
             },
-            site: {
+            files: {
                 src: ['src/*.hbs'],
-                dest: 'build/'
+                dest: 'dist/'
             }
         }
     });
