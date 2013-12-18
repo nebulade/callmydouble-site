@@ -1,0 +1,21 @@
+{
+  "name": "callmydouble-site",
+  "version": "0.1.0",
+  "description": "Website for callmydouble",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nebulade/callmydouble-site.git"
+  },
+  "author": "Johannes Zellner",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/nebulade/callmydouble-site/issues"
+  },
+  "homepage": "https://github.com/nebulade/callmydouble-site",
+  "devDependencies": {
+    "handlebars": "~1.1.2",
+    "assemble": "~0.4.33",
+    "grunt": "~0.4.2",
+    "grunt-contrib-uglify": "~0.2.7"
+  }
+}
