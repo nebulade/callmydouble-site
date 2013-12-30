@@ -79,15 +79,21 @@
 
       <div id="box-application" class="container box" style="display: none;">
         <div class="row">
+          <div><b>Callback base URL</b></div>
+          <a href="" target="_blank" id="callback-url"></a>
+        </div>
+        <div class="row">
           <div><b>Application Key</b></div>
-          <div id="application-key">somekey-af-sadf</div>
+          <input type="text" class="form-control" id="application-key" readonly="readonly"></input>
         </div>
         <div class="row">
           <div><b>Application Secret</b></div>
-          <div id="application-secret">somesecret</div>
+          <input type="text" class="form-control" id="application-secret" readonly="readonly"></input>
         </div>
-        <div class="row">
-          <button class="btn btn-lg btn-primary btn-block" id="app-refresh-button">Refresh</button>
+        <div class="row box-bottom">
+          <button class="btn btn-lg btn-primary btn-block" id="app-refresh-button">
+            <span class="glyphicon glyphicon-refresh"></span>Refresh
+          </button>
         </div>
       </div>
 

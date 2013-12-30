@@ -2,13 +2,13 @@
 
 /* global superagent:false */
 
-var BACKEND_URL = 'http://localhost:3001/api/v1/';
+var BACKEND_URL = 'http://localhost:3001';
 
 function getApplicationDetails(callback) {
     var email = $('input[name=email]').val();
     var password = $('input[name=password]').val();
 
-    superagent.post(BACKEND_URL + 'apps/0/details').withCredentials().auth(email, password).end(function (error, result) {
+    superagent.post(BACKEND_URL + '/api/v1/apps/0/details').withCredentials().auth(email, password).end(function (error, result) {
         if (error || !result.ok) {
             return callback(error ? error : result.status);
         }
@@ -21,7 +21,7 @@ function refreshApplicationDetails(callback) {
     var email = $('input[name=email]').val();
     var password = $('input[name=password]').val();
 
-    superagent.post(BACKEND_URL + 'apps/0/generate').withCredentials().auth(email, password).end(function (error, result) {
+    superagent.post(BACKEND_URL + '/api/v1/apps/0/generate').withCredentials().auth(email, password).end(function (error, result) {
         if (error || !result.ok) {
             return callback(error ? error : result.status);
         }
@@ -31,7 +31,7 @@ function refreshApplicationDetails(callback) {
 }
 
 function signin(email, password) {
-    superagent.post(BACKEND_URL + 'users/signin').withCredentials().auth(email, password).end(function (error, result) {
+    superagent.post(BACKEND_URL + '/api/v1/users/signin').withCredentials().auth(email, password).end(function (error, result) {
         if (error || !result.ok) {
             console.error('Failed to sign in.', error, result && result.status);
             return;
@@ -47,12 +47,20 @@ function signin(email, password) {
                 return;
             }
 
-            $('#application-key').text(result.appKey);
-            $('#application-secret').text(result.appSecret);
-            $('#box-signin').hide();
-            $('#box-application').show();
+            fillApplicationDetailsForm(result.appKey, result.appSecret);
         });
     });
+}
+
+function fillApplicationDetailsForm(appKey, appSecret) {
+    $('#application-key').val(appKey);
+    $('#application-key').click(function () { $(this).select(); });
+    $('#application-secret').val(appSecret);
+    $('#application-secret').click(function () { $(this).select(); });
+    $('#callback-url').text(BACKEND_URL + '/proxy/' + appKey);
+    $('#callback-url').attr('href', BACKEND_URL + '/proxy/' + appKey + '/test/route');
+    $('#box-signin').hide();
+    $('#box-application').show();
 }
 
 function init() {
@@ -74,8 +82,7 @@ function init() {
                     return;
                 }
 
-                $('#application-key').text(result.appKey);
-                $('#application-secret').text(result.appSecret);
+                fillApplicationDetailsForm(result.appKey, result.appSecret);
             });
         });
         $('#modal-confirm-cancel').click(function (event) {
