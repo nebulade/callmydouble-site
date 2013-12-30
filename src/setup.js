@@ -3,6 +3,7 @@
 /* global superagent:false */
 
 var BACKEND_URL = 'http://localhost:3001';
+// var BACKEND_URL = 'http://infinite-ravine-8074.herokuapp.com';
 
 function getApplicationDetails(callback) {
     var email = $('input[name=email]').val();
@@ -72,22 +73,25 @@ function init() {
         event.preventDefault();
     });
 
+    // setup event handler for all buttons
     $('#app-refresh-button').click(function (event) {
         confirmDialog.modal('show');
-        $('#modal-confirm-ok').click(function () {
-            confirmDialog.modal('hide');
-            refreshApplicationDetails(function (error, result) {
-                if (error) {
-                    console.error('Failed to get details.', error);
-                    return;
-                }
+    });
 
-                fillApplicationDetailsForm(result.appKey, result.appSecret);
-            });
+    $('#modal-confirm-ok').click(function () {
+        confirmDialog.modal('hide');
+        refreshApplicationDetails(function (error, result) {
+            if (error) {
+                console.error('Failed to get details.', error);
+                return;
+            }
+
+            fillApplicationDetailsForm(result.appKey, result.appSecret);
         });
-        $('#modal-confirm-cancel').click(function (event) {
-            confirmDialog.modal('hide');
-        });
+    });
+
+    $('#modal-confirm-cancel').click(function (event) {
+        confirmDialog.modal('hide');
     });
 }
 
