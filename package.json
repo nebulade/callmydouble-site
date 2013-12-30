@@ -17,6 +17,8 @@
     "assemble": "~0.4.33",
     "grunt": "~0.4.2",
     "grunt-contrib-uglify": "~0.2.7",
-    "assemble-handlebars": "~0.2.2"
+    "assemble-handlebars": "~0.2.2",
+    "grunt-contrib-copy": "~0.5.0",
+    "grunt-contrib-clean": "~0.5.0"
   }
 }

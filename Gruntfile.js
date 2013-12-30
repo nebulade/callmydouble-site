@@ -11,6 +11,7 @@ module.exports = function(grunt) {
             },
             minify: {
                 expand: true,
+                flatten: true,
                 src: ['src/*.js'],
                 dest: 'dist/'
             }
@@ -21,16 +22,47 @@ module.exports = function(grunt) {
             },
             files: {
                 src: ['src/*.hbs'],
-                dest: 'dist/'
+                dest: 'dist/',
+                flatten: true,
+                expand: true
             }
-        }
+        },
+        copy: {
+            assets: {
+                files: [
+                    {
+                        expand: true,
+                        flatten: false,
+                        cwd: 'src/',
+                        src: ['assets/**'],
+                        dest: 'dist/'
+                    }
+                ]
+            },
+            main: {
+                files: [
+                    {
+                        expand: true,
+                        flatten: false,
+                        cwd: 'src/',
+                        src: ['*.html', '*.css'],
+                        dest: 'dist/'
+                    }
+                ]
+            }
+        },
+        clean: [
+            'dist/'
+        ]
     });
 
     // Load the plugins
+    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('assemble');
 
     // Default task(s).
-    grunt.registerTask('default', ['uglify', 'assemble']);
+    grunt.registerTask('default', ['clean', 'uglify', 'assemble', 'copy']);
 
 };
