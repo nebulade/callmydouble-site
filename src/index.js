@@ -254,8 +254,6 @@ function getApplicationDetails(callback) {
     });
 }
 
-
-
 function showFragment(fragment) {
     for (var frag in context.fragments) {
         if (context.fragments.hasOwnProperty(frag)) {
@@ -265,7 +263,6 @@ function showFragment(fragment) {
 
     fragment.show();
 }
-
 
 function init() {
     context.navbar = new NavbarFragment(context);
