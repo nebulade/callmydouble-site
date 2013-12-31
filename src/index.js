@@ -14,11 +14,22 @@ context.fragments = {};
 // *********************************************
 
 function NavbarFragment (context) {
+    var that = this;
+
     this.container = $('#box-navbar');
-    this.buttonSignup = $('#signup-button');
+    this.buttonGetADouble = $('#get-a-double-button');
     this.buttonLogin = $('#login-button');
     this.buttonLogout = $('#logout-button');
+    this.buttonSignup = $('#signup-button');
     this.buttonDeleteAccount = $('#delete-account-button');
+
+    this.confirmDialog = $('#modal-account-delete');
+    this.confirmDialogButtonOk = $('#modal-account-delete-ok');
+    this.confirmDialogButtonCancel = $('#modal-account-delete-cancel');
+
+    this.buttonGetADouble.click(function () {
+        showFragment(context.fragments.signup);
+    });
 
     this.buttonSignup.click(function () {
         showFragment(context.fragments.signup);
@@ -34,7 +45,25 @@ function NavbarFragment (context) {
     });
 
     this.buttonDeleteAccount.click(function (event) {
-        console.warn('Not implemented.');
+        that.confirmDialog.modal('show');
+    });
+
+    this.confirmDialogButtonOk.click(function () {
+        that.confirmDialog.modal('hide');
+
+        superagent.post(BACKEND_URL + '/api/v1/users/signoff').withCredentials().query({ userToken: $.cookie('userToken') }).end(function (error, result) {
+            if (error || !result.ok) {
+                console.error('Failed to delete the account.', error, result && result.status);
+                return;
+            }
+
+            $.removeCookie('userToken');
+            window.location.href = '/';
+        });
+    });
+
+    this.confirmDialogButtonCancel.click(function (event) {
+        that.confirmDialog.modal('hide');
     });
 }
 
@@ -61,6 +90,7 @@ WelcomeFragment.prototype.show = function () {
     this.container.show();
     this.context.navbar.buttonLogout.hide();
     this.context.navbar.buttonLogin.show();
+    this.context.navbar.buttonSignup.show();
     this.context.navbar.buttonDeleteAccount.hide();
 };
 
@@ -115,6 +145,7 @@ function LoginFragment (context) {
 
 LoginFragment.prototype.show = function () {
     this.container.show();
+    this.context.navbar.buttonSignup.show();
     this.context.navbar.buttonLogout.hide();
     this.context.navbar.buttonLogin.hide();
     this.context.navbar.buttonDeleteAccount.hide();
@@ -171,6 +202,7 @@ function SignupFragment (context) {
 
 SignupFragment.prototype.show = function () {
     this.container.show();
+    this.context.navbar.buttonSignup.hide();
     this.context.navbar.buttonLogout.hide();
     this.context.navbar.buttonLogin.show();
     this.context.navbar.buttonDeleteAccount.hide();
@@ -223,6 +255,7 @@ function ApplicationFragment (context) {
 
 ApplicationFragment.prototype.show = function () {
     this.container.show();
+    this.context.navbar.buttonSignup.hide();
     this.context.navbar.buttonLogout.show();
     this.context.navbar.buttonLogin.hide();
     this.context.navbar.buttonDeleteAccount.show();

@@ -35,13 +35,12 @@
 
   <body>
 
-    <!-- Modal -->
     <div class="modal fade" id="modal-confirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="myModalLabel">Generate new Application Keys</h4>
+            <h4 class="modal-title">Generate new Application Keys</h4>
           </div>
           <div class="modal-body">
             This will make your the callback URLs with your old application key unusable.
@@ -51,9 +50,27 @@
             <button type="button" class="btn btn-default" data-dismiss="modal" id="modal-confirm-cancel">Close</button>
             <button type="button" class="btn btn-primary" id="modal-confirm-ok">Generate</button>
           </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="modal-account-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Delete your account</h4>
+          </div>
+          <div class="modal-body">
+            Really want to delete your account?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" id="modal-account-delete-cancel">Cancel</button>
+            <button type="button" class="btn btn-danger" id="modal-account-delete-ok">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div class="container">
       <div class="header" id="box-navbar">
@@ -61,6 +78,7 @@
           <li><button class="btn btn-xs btn-success" id="login-button">Login</button></li>
           <li><button class="btn btn-xs btn-warning" id="logout-button"><span class="glyphicon glyphicon-off"></span> Logout</button></li>
           <li><button class="btn btn-xs btn-danger" id="delete-account-button"><span class="glyphicon glyphicon-trash"></span> Delete Account</button></li>
+          <li><button class="btn btn-xs btn-primary" id="signup-button">Register</button></li>
         </ul>
         <h3 class="text-muted">Call my Double</h3>
       </div>
@@ -68,7 +86,7 @@
       <div id="box-welcome" class="jumbotron" style="display: none;">
         <h1>Public callbacks on localhost</h1>
         <p class="lead">Ever needed a public beach head to catch callbacks from 3rd party services, but you want to react locally?</p>
-        <p><button class="btn btn-lg btn-primary" id="signup-button">Get a Double</button></p>
+        <p><button class="btn btn-lg btn-primary" id="get-a-double-button">Get a Double</button></p>
       </div>
 
       <div id="box-login" class="container" style="display: none;">
