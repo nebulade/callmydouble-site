@@ -29,7 +29,8 @@ function NavbarFragment (context) {
     });
 
     this.buttonLogout.click(function (event) {
-        logout();
+        $.removeCookie('userToken');
+        window.location.href = '/';
     });
 
     this.buttonDeleteAccount.click(function (event) {
@@ -204,13 +205,14 @@ function ApplicationFragment (context) {
 
     this.confirmDialogButtonOk.click(function () {
         that.confirmDialog.modal('hide');
-        refreshApplicationDetails(function (error, result) {
-            if (error) {
+
+        superagent.post(BACKEND_URL + '/api/v1/apps/0/generate').withCredentials().query({ userToken: $.cookie('userToken') }).end(function (error, result) {
+            if (error || !result.ok) {
                 console.error('Failed to get details.', error);
                 return;
             }
 
-            that.fillForm(result.appKey, result.appSecret);
+            that.fillForm(result.body.appKey, result.body.appSecret);
         });
     });
 
@@ -252,20 +254,7 @@ function getApplicationDetails(callback) {
     });
 }
 
-function refreshApplicationDetails(callback) {
-    var req = superagent.post(BACKEND_URL + '/api/v1/apps/0/generate').withCredentials().query({ userToken: $.cookie('userToken') }).end(function (error, result) {
-        if (error || !result.ok) {
-            return callback(error ? error : result.status);
-        }
 
-        callback(null, result.body);
-    });
-}
-
-function logout() {
-    $.removeCookie('userToken');
-    window.location.href = '/';
-}
 
 function showFragment(fragment) {
     for (var frag in context.fragments) {
@@ -285,6 +274,7 @@ function init() {
     context.fragments.signup = new SignupFragment(context);
     context.fragments.application = new ApplicationFragment(context);
 
+    // figure out if we have a session and then carry on
     if ($.cookie('userToken')) {
         getApplicationDetails(function (error, result) {
             if (error) {
