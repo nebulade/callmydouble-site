@@ -26,6 +26,7 @@
     <![endif]-->
 
     <script src="assets/jquery-2.0.3.min.js"></script>
+    <script src="assets/jquery.cookie.js"></script>
     <script src="assets/js/bootstrap.min.js"></script>
     <script src="assets/superagent.js"></script>
     <script src="setup.js"></script>
@@ -65,35 +66,47 @@
         <h3 class="text-muted">Call my Double</h3>
       </div>
 
+
       <div id="box-signin" class="container">
         <form class="form-signin box" id="form-generate" role="form">
           <h2 class="form-signin-heading">Manage your Double</h2>
           <input type="email" class="form-control" placeholder="email" name="email" required autofocus>
           <input type="password" class="form-control" placeholder="password" name="password" required autofocus>
           <label class="checkbox">
-            <input type="checkbox" value="remember-me"> Remember me
+            <input type="checkbox" name="remember" value="remember"> Remember me
           </label>
           <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
         </form>
       </div>
 
       <div id="box-application" class="container box" style="display: none;">
-        <div class="row">
-          <div><b>Callback base URL</b></div>
-          <a href="" target="_blank" id="callback-url"></a>
-        </div>
-        <div class="row">
-          <div><b>Application Key</b></div>
-          <input type="text" class="form-control" id="application-key" readonly="readonly"></input>
-        </div>
-        <div class="row">
-          <div><b>Application Secret</b></div>
-          <input type="text" class="form-control" id="application-secret" readonly="readonly"></input>
-        </div>
-        <div class="row box-bottom">
-          <button class="btn btn-lg btn-primary btn-block" id="app-refresh-button">
-            <span class="glyphicon glyphicon-refresh"></span>Refresh
+        <div class="header pull-right">
+          <button class="btn btn-xs btn-warning navbar-btn" id="logout-button">
+            <span class="glyphicon glyphicon-off"></span> Logout
           </button>
+          <button class="btn btn-xs btn-danger navbar-btn" id="delete-account-button">
+            <span class="glyphicon glyphicon-trash"></span> Delete Account
+          </button>
+        </div>
+
+        <div id="box-application" class="container box">
+          <div class="row">
+            <div><b>Callback base URL</b></div>
+            <a href="" target="_blank" id="callback-url"></a>
+          </div>
+          <div class="row">
+            <div><b>Application Key</b></div>
+            <input type="text" class="form-control" id="application-key" readonly="readonly"></input>
+          </div>
+          <div class="row">
+            <div><b>Application Secret</b></div>
+            <input type="text" class="form-control" id="application-secret" readonly="readonly"></input>
+          </div>
+          <div class="row box-bottom">
+            <button class="btn btn-lg btn-primary btn-block" id="app-refresh-button">
+              <span class="glyphicon glyphicon-refresh"></span> Refresh
+            </button>
+          </div>
         </div>
       </div>
 

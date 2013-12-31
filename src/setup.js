@@ -6,10 +6,7 @@ var BACKEND_URL = 'http://localhost:3001';
 // var BACKEND_URL = 'http://infinite-ravine-8074.herokuapp.com';
 
 function getApplicationDetails(callback) {
-    var email = $('input[name=email]').val();
-    var password = $('input[name=password]').val();
-
-    superagent.post(BACKEND_URL + '/api/v1/apps/0/details').withCredentials().auth(email, password).end(function (error, result) {
+    var req = superagent.post(BACKEND_URL + '/api/v1/apps/0/details').withCredentials().query({ userToken: $.cookie('userToken') }).end(function (error, result) {
         if (error || !result.ok) {
             return callback(error ? error : result.status);
         }
@@ -19,10 +16,7 @@ function getApplicationDetails(callback) {
 }
 
 function refreshApplicationDetails(callback) {
-    var email = $('input[name=email]').val();
-    var password = $('input[name=password]').val();
-
-    superagent.post(BACKEND_URL + '/api/v1/apps/0/generate').withCredentials().auth(email, password).end(function (error, result) {
+    var req = superagent.post(BACKEND_URL + '/api/v1/apps/0/generate').withCredentials().query({ userToken: $.cookie('userToken') }).end(function (error, result) {
         if (error || !result.ok) {
             return callback(error ? error : result.status);
         }
@@ -31,8 +25,8 @@ function refreshApplicationDetails(callback) {
     });
 }
 
-function signin(email, password) {
-    superagent.post(BACKEND_URL + '/api/v1/users/signin').withCredentials().auth(email, password).end(function (error, result) {
+function login(email, password, remember) {
+    var req = superagent.post(BACKEND_URL + '/api/v1/users/login').withCredentials().auth(email, password).end(function (error, result) {
         if (error || !result.ok) {
             console.error('Failed to sign in.', error, result && result.status);
             return;
@@ -40,7 +34,10 @@ function signin(email, password) {
 
         if (result.status !== 200 && result.status !== 201) {
             console.error('Failed to sign in.', result.status);
+            return;
         }
+
+        $.cookie('userToken', result.body.userToken, { expires: (remember ? 7 : null ) });
 
         getApplicationDetails(function (error, result) {
             if (error) {
@@ -51,6 +48,11 @@ function signin(email, password) {
             fillApplicationDetailsForm(result.appKey, result.appSecret);
         });
     });
+}
+
+function logout() {
+    $.removeCookie('userToken');
+    window.location.href = '/';
 }
 
 function fillApplicationDetailsForm(appKey, appSecret) {
@@ -68,8 +70,19 @@ function init() {
     var form = $('#form-generate');
     var confirmDialog = $('#modal-confirm');
 
+    if ($.cookie('userToken')) {
+        getApplicationDetails(function (error, result) {
+            if (error) {
+                console.error('Failed to get details.', error);
+                return;
+            }
+
+            fillApplicationDetailsForm(result.appKey, result.appSecret);
+        });
+    }
+
     form.submit(function (event) {
-        signin($('input[name=email]').val(), $('input[name=password]').val());
+        login($('input[name=email]').val(), $('input[name=password]').val(), $('input[name=remember]').is(':checked'));
         event.preventDefault();
     });
 
@@ -92,6 +105,14 @@ function init() {
 
     $('#modal-confirm-cancel').click(function (event) {
         confirmDialog.modal('hide');
+    });
+
+    $('#logout-button').click(function (event) {
+        logout();
+    });
+
+    $('#delete-account-button').click(function (event) {
+        console.warn('Not implemented.');
     });
 }
 
