@@ -96,6 +96,20 @@ module.exports = function(grunt) {
                 files: ['src/*.css'],
                 tasks: ['copy']
             }
+        },
+        rsync: {
+            options: {
+                args: ['--verbose'],
+                recursive: true
+            },
+            prod: {
+                options: {
+                    src: './dist/',
+                    dest: './webseiten/nebulon_de/callmydouble/',
+                    host: 'ssh-30675-jzellner@nebulon.de',
+                    syncDestIgnoreExcl: true
+                }
+            }
         }
     });
 
@@ -106,8 +120,10 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('assemble');
+    grunt.loadNpmTasks('grunt-rsync');
 
     // Default task(s).
     grunt.registerTask('default', ['clean', 'jshint', 'uglify', 'assemble:local', 'copy']);
     grunt.registerTask('heroku', ['clean', 'jshint', 'uglify', 'assemble:heroku', 'copy']);
+    grunt.registerTask('deploy', ['heroku', 'rsync:prod']);
 };
