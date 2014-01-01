@@ -11,6 +11,10 @@
   "bugs": {
     "url": "https://github.com/nebulade/callmydouble-site/issues"
   },
+  "bin": {
+    "callmydouble": "./bin/client",
+    "callmydouble-server": "./bin/server"
+  },
   "homepage": "https://github.com/nebulade/callmydouble-site",
   "devDependencies": {
     "handlebars": "~1.1.2",

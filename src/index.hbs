@@ -106,31 +106,64 @@
           <h2 class="form-signin-heading">Create your Double</h2>
           <input type="email" class="form-control" placeholder="email" name="email" required autofocus>
           <input type="password" class="form-control" placeholder="password" name="password" required autofocus>
-          <input type="password" class="form-control" placeholder="password repeat" name="password-repeat" required autofocus>
+          <input type="password" class="form-control" placeholder="repeat password" name="password-repeat" required autofocus>
           <button class="btn btn-lg btn-primary btn-block" type="submit">Sign Up</button>
         </form>
       </div>
 
       <div id="box-application" class="container box" style="display: none;">
-
-        <div id="box-application" class="container box">
+        <div class="box">
+          <div class="row pull-right">
+              <button class="btn btn-xs btn-primary btn-block" id="app-refresh-button">
+                <span class="glyphicon glyphicon-refresh"></span> Refresh
+              </button>
+          </div>
           <div class="row">
             <div><b>Callback base URL</b></div>
             <a href="" target="_blank" id="callback-url"></a>
           </div>
           <div class="row">
-            <div><b>Application Key</b></div>
+            <div>
+              <b>Application Key</b>
+            </div>
             <input type="text" class="form-control" id="application-key" readonly="readonly"></input>
           </div>
           <div class="row">
             <div><b>Application Secret</b></div>
             <input type="text" class="form-control" id="application-secret" readonly="readonly"></input>
           </div>
-          <div class="row box-bottom">
-            <button class="btn btn-lg btn-primary btn-block" id="app-refresh-button">
-              <span class="glyphicon glyphicon-refresh"></span> Refresh
-            </button>
-          </div>
+        </div>
+        <div class="box">
+          <div class="row">
+            <b>Usage</b>
+            <br/><br/>
+            <div>
+              <div>
+                <p>
+                  Both the client and the server come in one node module, which can be installed via npm.
+                  If you want to use the example client, install it globally to make the client command available:
+                </p>
+                <code>
+                  $ sudo npm install -g callmydouble
+                </code>
+                <p>
+                  If you want to integrate the client inside your node application directly install it local to your project:
+                </p>
+                <code>
+                  $ cd <your-project>
+                  $ npm install --save callmydouble
+                </code>
+              </div>
+              <div>
+                <p>To run the example client to listen for dispatched callbacks run it like below.</p>
+                <code>
+                  $ callmydouble listen --key <span id="usage-app-key"></span> --secret <span id="usage-app-secret"></span><br/>
+                </code>
+                <p>
+                  If not installed globally, the example client is still available at <code>./node_modules/.bin/callmydouble</code>
+                </p>
+              </div>
+            </div>
         </div>
       </div>
 

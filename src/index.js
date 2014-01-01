@@ -230,6 +230,8 @@ function ApplicationFragment (context) {
     this.inputAppKey = $('#application-key');
     this.inputAppSecret = $('#application-secret');
     this.inputCallbackUrl = $('#callback-url');
+    this.usageAppKeyLabel = $('#usage-app-key');
+    this.usageAppSecretLabel = $('#usage-app-secret');
 
     this.buttonRefresh.click(function (event) {
         that.confirmDialog.modal('show');
@@ -272,6 +274,9 @@ ApplicationFragment.prototype.fillForm = function (appKey, appSecret) {
     this.inputAppSecret.click(function () { $(this).select(); });
     this.inputCallbackUrl.text(BACKEND_URL + '/proxy/' + appKey);
     this.inputCallbackUrl.attr('href', BACKEND_URL + '/proxy/' + appKey + '/test/route');
+
+    this.usageAppKeyLabel.text(appKey);
+    this.usageAppSecretLabel.text(appSecret);
 };
 
 
