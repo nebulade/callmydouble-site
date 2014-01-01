@@ -86,7 +86,7 @@ module.exports = function(grunt) {
             },
             hbs: {
                 files: ['src/*.hbs'],
-                tasks: ['assemble']
+                tasks: ['assemble:local']
             },
             html: {
                 files: ['src/*.html'],

@@ -5,8 +5,6 @@
 var context = {};
 context.fragments = {};
 
-var BACKEND_URL = window.BACKEND_URL || 'http://localhost:3001';
-
 // *********************************************
 //  Navbar Fragment
 // *********************************************
@@ -49,7 +47,7 @@ function NavbarFragment (context) {
     this.confirmDialogButtonOk.click(function () {
         that.confirmDialog.modal('hide');
 
-        superagent.post(BACKEND_URL + '/api/v1/users/signoff').withCredentials().query({ userToken: $.cookie('userToken') }).end(function (error, result) {
+        superagent.post(window.BACKEND_URL + '/api/v1/users/signoff').withCredentials().query({ userToken: $.cookie('userToken') }).end(function (error, result) {
             if (error || !result.ok) {
                 console.error('Failed to delete the account.', error, result && result.status);
                 return;
@@ -108,25 +106,25 @@ function LoginFragment (context) {
 
     this.container = $('#box-login');
     this.form = $('#form-generate');
-    this.email = $('#form-generate > input[name=email]');
-    this.password = $('#form-generate > input[name=password]');
-    this.remember = $('#form-generate > input[name=remember]');
+    this.email = $('#form-generate input[name=email]');
+    this.password = $('#form-generate input[name=password]');
+    this.remember = $('#form-generate input[name=remember]');
 
     this.form.submit(function (event) {
         event.preventDefault();
 
-        superagent.post(BACKEND_URL + '/api/v1/users/login').withCredentials().auth(that.email.val(), that.password.val()).end(function (error, result) {
+        superagent.post(window.BACKEND_URL + '/api/v1/users/login').withCredentials().auth(that.email.val(), that.password.val()).end(function (error, result) {
             if (error || !result.ok) {
                 console.error('Failed to sign in.', error, result && result.status);
-                return;
-            }
-
-            if (result.status !== 200 && result.status !== 201) {
-                console.error('Failed to sign in.', result.status);
+                that.password.val('');
+                that.email.parent().addClass('has-error');
+                that.password.parent().addClass('has-error');
                 return;
             }
 
             $.cookie('userToken', result.body.userToken, { expires: (that.remember.is(':checked') ? 7 : null ) });
+            that.email.parent().removeClass('has-error');
+            that.password.parent().removeClass('has-error');
 
             getApplicationDetails(function (error, result) {
                 if (error) {
@@ -165,22 +163,29 @@ function SignupFragment (context) {
 
     this.container = $('#box-signup');
     this.form = $('#signup-form');
-    this.email = $('#signup-form > input[name=email]');
-    this.password = $('#signup-form > input[name=password]');
-    this.passwordRepeat = $('#signup-form > input[name=password-repeat]');
+    this.email = $('#signup-form input[name=email]');
+    this.password = $('#signup-form input[name=password]');
+    this.passwordRepeat = $('#signup-form input[name=password-repeat]');
 
     this.form.submit(function (event) {
         event.preventDefault();
 
         if (that.password.val() !== that.passwordRepeat.val()) {
-            console.error('Passwords dont match');
+            console.error('Passwords don\'t match');
             that.passwordRepeat.val('');
+            that.passwordRepeat.parent().addClass('has-error');
             return;
         }
 
-        superagent.post(BACKEND_URL + '/api/v1/users/signup').auth(that.email.val(), that.password.val()).end(function (error, result) {
+        superagent.post(window.BACKEND_URL + '/api/v1/users/signup').auth(that.email.val(), that.password.val()).end(function (error, result) {
             if (error) {
                 console.error('Unable to reach the server.', error);
+                return;
+            }
+
+            if (result.status === 409) {
+                console.error('User %s already exists.', that.email.val());
+                that.email.parent().addClass('has-error');
                 return;
             }
 
@@ -192,6 +197,9 @@ function SignupFragment (context) {
             console.log('Account for user %s created.', that.email.val());
 
             $.cookie('userToken', result.body.userToken);
+            console.log(that.passwordRepeat);
+            that.passwordRepeat.parent().removeClass('has-error');
+            that.email.parent().removeClass('has-error');
             context.fragments.application.fillForm(result.body.appKey, result.body.appSecret);
             showFragment(context.fragments.application);
         });
@@ -238,7 +246,7 @@ function ApplicationFragment (context) {
     this.confirmDialogButtonOk.click(function () {
         that.confirmDialog.modal('hide');
 
-        superagent.post(BACKEND_URL + '/api/v1/apps/0/generate').withCredentials().query({ userToken: $.cookie('userToken') }).end(function (error, result) {
+        superagent.post(window.BACKEND_URL + '/api/v1/apps/0/generate').withCredentials().query({ userToken: $.cookie('userToken') }).end(function (error, result) {
             if (error || !result.ok) {
                 console.error('Failed to get details.', error);
                 return;
@@ -270,8 +278,8 @@ ApplicationFragment.prototype.fillForm = function (appKey, appSecret) {
     this.inputAppKey.click(function () { $(this).select(); });
     this.inputAppSecret.val(appSecret);
     this.inputAppSecret.click(function () { $(this).select(); });
-    this.inputCallbackUrl.text(BACKEND_URL + '/proxy/' + appKey);
-    this.inputCallbackUrl.attr('href', BACKEND_URL + '/proxy/' + appKey + '/test/route');
+    this.inputCallbackUrl.text(window.BACKEND_URL + '/proxy/' + appKey);
+    this.inputCallbackUrl.attr('href', window.BACKEND_URL + '/proxy/' + appKey + '/test/route');
 
     this.usageAppKeyLabel.text(appKey);
     this.usageAppSecretLabel.text(appSecret);
@@ -281,7 +289,7 @@ ApplicationFragment.prototype.fillForm = function (appKey, appSecret) {
 
 // some global helpers
 function getApplicationDetails(callback) {
-    var req = superagent.post(BACKEND_URL + '/api/v1/apps/0/details').withCredentials().query({ userToken: $.cookie('userToken') }).end(function (error, result) {
+    var req = superagent.post(window.BACKEND_URL + '/api/v1/apps/0/details').withCredentials().query({ userToken: $.cookie('userToken') }).end(function (error, result) {
         if (error || !result.ok) {
             return callback(error ? error : result.status);
         }

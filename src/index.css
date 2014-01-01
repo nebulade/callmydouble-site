@@ -10,6 +10,7 @@ body {
   margin: 0 auto;
 }
 .box .form-signin-heading,
+.box .form-login-heading,
 .box .checkbox {
   margin-bottom: 10px;
 }
@@ -29,14 +30,9 @@ body {
   z-index: 2;
 }
 
-.form-signin input[name="email"] {
-  margin-bottom: -2px;
+.form-signin input[name="password"] {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-}
-
-.form-signin input[name="password"] {
-  border-radius: 0;
   margin-bottom: -2px;
 }
 
