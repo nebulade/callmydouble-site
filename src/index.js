@@ -2,12 +2,10 @@
 
 /* global superagent:false */
 
-var BACKEND_URL = 'http://localhost:3001';
-// var BACKEND_URL = 'http://infinite-ravine-8074.herokuapp.com';
-
 var context = {};
 context.fragments = {};
 
+var BACKEND_URL = window.BACKEND_URL || 'http://localhost:3001';
 
 // *********************************************
 //  Navbar Fragment

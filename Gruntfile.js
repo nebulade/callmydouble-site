@@ -34,13 +34,22 @@ module.exports = function(grunt) {
         },
         assemble: {
             options: {
-                data: ['data/*.json'],
-            },
-            files: {
-                src: ['src/*.hbs'],
-                dest: 'dist/',
                 flatten: true,
                 expand: true
+            },
+            local: {
+                src: ['src/*.hbs'],
+                dest: 'dist/',
+                options: {
+                    data: ['data/local/*.json']
+                }
+            },
+            heroku: {
+                src: ['src/*.hbs'],
+                dest: 'dist/',
+                options: {
+                    data: ['data/heroku/*.json']
+                }
             }
         },
         copy: {
@@ -99,5 +108,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('assemble');
 
     // Default task(s).
-    grunt.registerTask('default', ['clean', 'jshint', 'uglify', 'assemble', 'copy']);
+    grunt.registerTask('default', ['clean', 'jshint', 'uglify', 'assemble:local', 'copy']);
+    grunt.registerTask('heroku', ['clean', 'jshint', 'uglify', 'assemble:heroku', 'copy']);
 };
