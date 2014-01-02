@@ -239,6 +239,7 @@ function ApplicationFragment (context) {
     this.usageAppKeyLabel = $('#usage-app-key');
     this.usageAppSecretLabel = $('#usage-app-secret');
     this.usageRemoteLabel = $('#usage-remote');
+    this.usageExampleUrlLabel = $('#usage-example-url');
 
     this.buttonRefresh.click(function (event) {
         that.confirmDialog.modal('show');
@@ -285,6 +286,7 @@ ApplicationFragment.prototype.fillForm = function (appKey, appSecret) {
     this.usageAppKeyLabel.text(appKey);
     this.usageAppSecretLabel.text(appSecret);
     this.usageRemoteLabel.text(window.BACKEND_URL);
+    this.usageExampleUrlLabel.text(window.BACKEND_URL + '/proxy/' + appKey + '/test/route');
 };
 
 
