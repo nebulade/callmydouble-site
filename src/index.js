@@ -280,8 +280,8 @@ ApplicationFragment.prototype.fillForm = function (appKey, appSecret) {
     this.inputAppKey.click(function () { $(this).select(); });
     this.inputAppSecret.val(appSecret);
     this.inputAppSecret.click(function () { $(this).select(); });
-    this.inputCallbackUrl.text(window.BACKEND_URL + '/proxy/' + appKey);
-    this.inputCallbackUrl.attr('href', window.BACKEND_URL + '/proxy/' + appKey + '/test/route');
+    this.inputCallbackUrl.text(window.BACKEND_URL + '/proxy/' + appKey + '/');
+    this.inputCallbackUrl.attr('href', window.BACKEND_URL + '/proxy/' + appKey + '/');
 
     this.usageAppKeyLabel.text(appKey);
     this.usageAppSecretLabel.text(appSecret);
